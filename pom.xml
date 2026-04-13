@@ -45,6 +45,12 @@
             <artifactId>quarkus-rest-jackson</artifactId>
         </dependency>
         
+        <!-- Quarkus REST Client -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-client-jackson</artifactId>
+        </dependency>
+        
         <!-- Hibernate ORM with Panache -->
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -87,6 +93,18 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
+        </dependency>
+        
+        <!-- SmallRye Health for Health Checks -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-health</artifactId>
+        </dependency>
+        
+        <!-- Micrometer Metrics -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-micrometer-registry-prometheus</artifactId>
         </dependency>
         
         <!-- Testing -->

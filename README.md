@@ -325,12 +325,74 @@ curl -X PUT http://localhost:8080/api/products/1 \
 curl -X DELETE http://localhost:8080/api/products/1
 ```
 
+## Monitoring & Health Checks
+
+### Health Check Endpoints
+
+Aplikasi menyediakan health check endpoints untuk monitoring:
+
+#### 1. Overall Health Status
+```bash
+curl http://localhost:8080/q/health
+```
+
+Response:
+```json
+{
+  "status": "UP",
+  "checks": [
+    {
+      "name": "Database connection health check",
+      "status": "UP",
+      "data": {
+        "database": "MySQL"
+      }
+    },
+    {
+      "name": "External Auth API health check",
+      "status": "UP",
+      "data": {
+        "api": "https://devhcbead.assa.id",
+        "note": "API reachable (auth failed as expected)"
+      }
+    }
+  ]
+}
+```
+
+#### 2. Liveness Check
+```bash
+curl http://localhost:8080/q/health/live
+```
+Checks if the application is running (database connectivity).
+
+#### 3. Readiness Check
+```bash
+curl http://localhost:8080/q/health/ready
+```
+Checks if the application is ready to serve requests (external API connectivity).
+
+### Metrics Endpoint
+
+Monitor aplikasi dengan Prometheus metrics:
+
+```bash
+curl http://localhost:8080/q/metrics
+```
+
+Metrics yang tersedia:
+- HTTP request counts dan durations
+- JVM memory usage
+- Database connection pool stats
+- Custom application metrics
+
 ## Tips Development
 
 - Gunakan **Quarkus Dev Mode** untuk hot reload
 - Akses **Dev UI** di `http://localhost:8080/q/dev/`
 - Lihat **Health Check** di `http://localhost:8080/q/health`
 - Monitor **Metrics** di `http://localhost:8080/q/metrics`
+- Check **OpenAPI/Swagger** di `http://localhost:8080/q/swagger-ui/`
 
 ## Troubleshooting
 

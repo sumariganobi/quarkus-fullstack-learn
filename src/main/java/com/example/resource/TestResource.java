@@ -45,4 +45,20 @@ public class TestResource {
             "message", "Bypass login successful!"
         )).build();
     }
+
+    @POST
+    @Path("/generate-hash")
+    public Response generateHash(Map<String, String> body) {
+        String password = body.get("password");
+        
+        // Generate bcrypt hash
+        String hash = at.favre.lib.crypto.bcrypt.BCrypt.withDefaults()
+            .hashToString(12, password.toCharArray());
+        
+        return Response.ok(Map.of(
+            "password", password,
+            "hash", hash,
+            "message", "Hash generated successfully"
+        )).build();
+    }
 }
