@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>quarkus-crud-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>warehouse-module</artifactId>
+    <name>Warehouse Module</name>
+    <description>Warehouse management module</description>
+    
+    <dependencies>
+        <!-- Common Module -->
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>common-module</artifactId>
+        </dependency>
+        
+        <!-- Quarkus REST -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest</artifactId>
+        </dependency>
+        
+        <!-- Hibernate ORM with Panache -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-orm-panache</artifactId>
+        </dependency>
+        
+        <!-- Hibernate Validator -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-hibernate-validator</artifactId>
+        </dependency>
+    </dependencies>
+</project>

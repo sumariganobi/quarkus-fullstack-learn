@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>quarkus-crud-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>app-module</artifactId>
+    <name>Application Module</name>
+    <description>Main application that aggregates all modules</description>
+    
+    <dependencies>
+        <!-- All modules -->
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>common-module</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>product-module</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>warehouse-module</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>frontend-module</artifactId>
+        </dependency>
+        
+        <!-- Quarkus Core -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arc</artifactId>
+        </dependency>
+        
+        <!-- JDBC MySQL -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-mysql</artifactId>
+        </dependency>
+        
+        <!-- Flyway -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-flyway</artifactId>
+        </dependency>
+        
+        <!-- Flyway MySQL Support -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+            <version>${flyway.version}</version>
+        </dependency>
+        
+        <!-- Testing -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>quarkus-maven-plugin</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>generate-code</goal>
+                            <goal>generate-code-tests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire-plugin.version}</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                        <maven.home>${maven.home}</maven.home>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

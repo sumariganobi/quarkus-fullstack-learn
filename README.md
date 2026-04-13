@@ -1,6 +1,23 @@
-# Quarkus CRUD Application
+# Quarkus Modular CRUD Application
 
-Aplikasi REST API CRUD sederhana menggunakan Quarkus (Imperative) dengan MariaDB dan Flyway migration.
+Aplikasi REST API CRUD modular menggunakan Quarkus (Imperative) dengan MySQL dan Flyway migration.
+
+## 🏗️ Arsitektur Modular
+
+Aplikasi ini dibangun dengan arsitektur modular yang memisahkan setiap fitur menjadi module independen:
+
+```
+quarkus-crud-app/
+├── Dashboard (/)                    # Halaman utama dengan statistik
+├── Products Module (/products.html) # Module manajemen produk
+└── Warehouse Module (/warehouses.html) # Module manajemen gudang
+```
+
+### Keuntungan Modular:
+- ✅ **Separation of Concerns** - Setiap module independen
+- ✅ **Easy to Extend** - Tambah module baru tanpa ubah yang lama
+- ✅ **Team Collaboration** - Tim bisa kerja di module berbeda
+- ✅ **Maintainable** - Mudah maintain dan debug per module
 
 ## Teknologi yang Digunakan
 
@@ -85,40 +102,27 @@ java -jar target/quarkus-app/quarkus-run.jar
 
 ## API Endpoints
 
-### 1. Get All Products
+### Products Module
+
+#### 1. Get All Products
 
 ```http
 GET http://localhost:8080/api/products
 ```
 
-**Response:**
-```json
-[
-  {
-    "id": 1,
-    "name": "Laptop",
-    "description": "High performance laptop",
-    "price": 15000000.00,
-    "stock": 10,
-    "createdAt": "2026-04-10T10:00:00",
-    "updatedAt": "2026-04-10T10:00:00"
-  }
-]
-```
-
-### 2. Search Products by Name
+#### 2. Search Products by Name
 
 ```http
 GET http://localhost:8080/api/products?name=laptop
 ```
 
-### 3. Get Product by ID
+#### 3. Get Product by ID
 
 ```http
 GET http://localhost:8080/api/products/1
 ```
 
-### 4. Create Product
+#### 4. Create Product
 
 ```http
 POST http://localhost:8080/api/products
@@ -132,7 +136,7 @@ Content-Type: application/json
 }
 ```
 
-### 5. Update Product
+#### 5. Update Product
 
 ```http
 PUT http://localhost:8080/api/products/1
@@ -146,10 +150,72 @@ Content-Type: application/json
 }
 ```
 
-### 6. Delete Product
+#### 6. Delete Product
 
 ```http
 DELETE http://localhost:8080/api/products/1
+```
+
+### Warehouse Module
+
+#### 1. Get All Warehouses
+
+```http
+GET http://localhost:8080/api/warehouses
+```
+
+#### 2. Search by Location
+
+```http
+GET http://localhost:8080/api/warehouses?location=Jakarta
+```
+
+#### 3. Get Available Warehouses
+
+```http
+GET http://localhost:8080/api/warehouses?available=true
+```
+
+#### 4. Get Warehouse by ID
+
+```http
+GET http://localhost:8080/api/warehouses/1
+```
+
+#### 5. Create Warehouse
+
+```http
+POST http://localhost:8080/api/warehouses
+Content-Type: application/json
+
+{
+  "name": "Warehouse Bandung",
+  "location": "Bandung",
+  "address": "Jl. Soekarno Hatta No. 789",
+  "capacity": 5000,
+  "currentStock": 2000
+}
+```
+
+#### 6. Update Warehouse
+
+```http
+PUT http://localhost:8080/api/warehouses/1
+Content-Type: application/json
+
+{
+  "name": "Warehouse Jakarta Updated",
+  "location": "Jakarta",
+  "address": "Updated address",
+  "capacity": 12000,
+  "currentStock": 8000
+}
+```
+
+#### 7. Delete Warehouse
+
+```http
+DELETE http://localhost:8080/api/warehouses/1
 ```
 
 ## Struktur Project
@@ -161,34 +227,62 @@ DELETE http://localhost:8080/api/products/1
 │   │   ├── java/com/example/
 │   │   │   ├── dto/              # Data Transfer Objects
 │   │   │   │   ├── ProductRequest.java
-│   │   │   │   └── ProductResponse.java
+│   │   │   │   ├── ProductResponse.java
+│   │   │   │   ├── WarehouseRequest.java
+│   │   │   │   └── WarehouseResponse.java
 │   │   │   ├── entity/           # Entity classes
-│   │   │   │   └── Product.java
+│   │   │   │   ├── Product.java
+│   │   │   │   └── Warehouse.java
 │   │   │   ├── exception/        # Exception handling
 │   │   │   │   ├── ErrorResponse.java
 │   │   │   │   └── GlobalExceptionHandler.java
-│   │   │   ├── resource/         # REST endpoints
-│   │   │   │   └── ProductResource.java
+│   │   │   ├── resource/         # REST endpoints (Controllers)
+│   │   │   │   ├── ProductResource.java
+│   │   │   │   └── WarehouseResource.java
 │   │   │   └── service/          # Business logic
-│   │   │       └── ProductService.java
+│   │   │       ├── ProductService.java
+│   │   │       └── WarehouseService.java
 │   │   └── resources/
+│   │       ├── META-INF/resources/  # Frontend files
+│   │       │   ├── index.html       # Dashboard
+│   │       │   ├── products.html    # Products Module UI
+│   │       │   ├── products.js      # Products Module Logic
+│   │       │   ├── warehouses.html  # Warehouse Module UI
+│   │       │   └── warehouses.js    # Warehouse Module Logic
 │   │       ├── application.properties
 │   │       └── db/migration/     # Flyway migrations
-│   │           └── V1__create_product_table.sql
+│   │           ├── V1__create_product_table.sql
+│   │           └── V2__create_warehouse_table.sql
 │   └── test/                     # Test files
-├── pom.xml
+├── .env                          # Environment variables (gitignored)
+├── .env.example                  # Template for .env
+├── docker-compose.yml            # Docker setup
+├── pom.xml                       # Maven configuration
+├── ARCHITECTURE.md               # Architecture documentation
+├── SECURITY.md                   # Security guidelines
 └── README.md
 ```
 
 ## Fitur
 
-✅ **CRUD Operations** - Create, Read, Update, Delete
-✅ **Database Migration** - Flyway untuk versioning database
-✅ **Validation** - Bean Validation untuk input
-✅ **Error Handling** - Global exception handler
-✅ **Search** - Search products by name
-✅ **Timestamps** - Auto-generated created_at dan updated_at
-✅ **DTO Pattern** - Separation of concerns dengan Request/Response DTOs
+### ✅ Backend Features:
+- **Modular Architecture** - Setiap module independen
+- **CRUD Operations** - Create, Read, Update, Delete untuk Products & Warehouses
+- **Database Migration** - Flyway untuk versioning database
+- **Validation** - Bean Validation untuk input
+- **Error Handling** - Global exception handler
+- **Search** - Search products by name, warehouses by location
+- **Timestamps** - Auto-generated created_at dan updated_at
+- **DTO Pattern** - Separation of concerns dengan Request/Response DTOs
+
+### ✅ Frontend Features:
+- **Dashboard** - Halaman utama dengan statistik dan navigasi
+- **Products Module** - Full CRUD UI untuk products
+- **Warehouse Module** - Full CRUD UI untuk warehouses
+- **Responsive Design** - Mobile-friendly dengan Tailwind CSS
+- **Real-time Updates** - Auto-refresh setelah CRUD operations
+- **Modern UI** - Gradient backgrounds, shadows, animations
+- **Navigation** - Easy navigation antar modules
 
 ## Database Migration
 

@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>com.example</groupId>
+    <artifactId>quarkus-crud-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    
+    <name>Quarkus CRUD - Parent</name>
+    <description>Parent POM for Quarkus Multi-Module CRUD Application</description>
+    
+    <properties>
+        <compiler-plugin.version>3.11.0</compiler-plugin.version>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+        <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+        <quarkus.platform.version>3.17.5</quarkus.platform.version>
+        <skipITs>true</skipITs>
+        <surefire-plugin.version>3.0.0</surefire-plugin.version>
+        <flyway.version>10.21.0</flyway.version>
+    </properties>
+    
+    <modules>
+        <module>common-module</module>
+        <module>product-module</module>
+        <module>warehouse-module</module>
+        <module>frontend-module</module>
+        <module>app-module</module>
+    </modules>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>${quarkus.platform.artifact-id}</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
+            <!-- Internal modules -->
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>common-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>product-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>warehouse-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>frontend-module</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>${quarkus.platform.group-id}</groupId>
+                    <artifactId>quarkus-maven-plugin</artifactId>
+                    <version>${quarkus.platform.version}</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler-plugin.version}</version>
+                    <configuration>
+                        <compilerArgs>
+                            <arg>-parameters</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
