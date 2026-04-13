@@ -3,13 +3,34 @@ const API_URL = '/api/warehouses';
 let editMode = false;
 let currentWarehouseId = null;
 
+// Check authentication and set user info
+const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || '{}');
+
+if (!token) {
+    window.location.href = '/login.html';
+}
+
 // Load warehouses on page load
 document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('userName').textContent = user.fullName || user.username;
+    document.getElementById('userEmail').textContent = user.email;
+    document.getElementById('userInitial').textContent = (user.fullName || user.username).charAt(0).toUpperCase();
+    
     loadWarehouses();
     
     document.getElementById('warehouseForm').addEventListener('submit', handleSubmit);
     document.getElementById('cancelBtn').addEventListener('click', resetForm);
 });
+
+// Logout function
+function logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
+    window.location.href = '/login.html';
+}
 
 // Load all warehouses
 async function loadWarehouses() {

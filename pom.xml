@@ -76,6 +76,13 @@
             <artifactId>quarkus-hibernate-validator</artifactId>
         </dependency>
         
+        <!-- Bcrypt for password hashing (standalone) -->
+        <dependency>
+            <groupId>at.favre.lib</groupId>
+            <artifactId>bcrypt</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+        
         <!-- Arc (CDI) -->
         <dependency>
             <groupId>io.quarkus</groupId>
