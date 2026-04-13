@@ -1,0 +1,7 @@
+# Local Development Profile
+# Copy this file to application-local.properties
+# DO NOT commit application-local.properties to git!
+
+quarkus.datasource.username=ns
+quarkus.datasource.password=your_actual_password
+quarkus.datasource.jdbc.url=jdbc:mysql://localhost:3306/quarkus_db?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC

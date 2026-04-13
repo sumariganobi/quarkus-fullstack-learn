@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: quarkus-mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${DB_NAME:-quarkus_db}
+      MYSQL_USER: ${DB_USERNAME:-ns}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-password}
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - quarkus-network
+    env_file:
+      - .env
+
+volumes:
+  mariadb_data:
+
+networks:
+  quarkus-network:
+    driver: bridge

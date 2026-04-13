@@ -1,0 +1,11 @@
+# Docker Compose Override (for local development)
+# Copy this file to docker-compose.override.yml
+# DO NOT commit docker-compose.override.yml to git!
+
+version: '3.8'
+
+services:
+  mariadb:
+    environment:
+      MYSQL_ROOT_PASSWORD: your_actual_root_password
+      MYSQL_PASSWORD: your_actual_password
