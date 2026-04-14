@@ -6,13 +6,21 @@ if (!token) {
     window.location.href = '/login.html';
 }
 
-// Set user info
-document.getElementById('userName').textContent = user.fullName || user.username;
-document.getElementById('userEmail').textContent = user.email;
-document.getElementById('welcomeName').textContent = user.fullName || user.username;
-document.getElementById('userInitial').textContent = (user.fullName || user.username).charAt(0).toUpperCase();
+// Set user info (will be called after sidebar loads)
+function setUserInfo() {
+    const welcomeNameEl = document.getElementById('welcomeName');
+    if (welcomeNameEl) {
+        welcomeNameEl.textContent = user.fullName || user.username;
+    }
+}
 
-// Logout function
+// Wait for sidebar to load before setting user info
+document.addEventListener('DOMContentLoaded', function() {
+    // Wait a bit for sidebar to load
+    setTimeout(setUserInfo, 100);
+});
+
+// Logout function (already in sidebar.js, but keep for compatibility)
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -59,20 +67,20 @@ function displayRecentProducts(products) {
         const statusColor = product.stock > 50 ? 'green' : product.stock > 0 ? 'yellow' : 'red';
         
         row.innerHTML = `
-            <td class="py-3 px-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-box text-gray-600"></i>
+            <td class="py-2 px-2 lg:px-2">
+                <div class="flex items-center gap-2 lg:gap-3">
+                    <div class="w-8 h-8 lg:w-10 lg:h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-box text-gray-600 text-sm lg:text-base"></i>
                     </div>
                     <div>
-                        <p class="font-medium text-gray-900">${product.name}</p>
-                        <p class="text-sm text-gray-500">${product.description || '-'}</p>
+                        <p class="font-medium text-gray-900 text-sm lg:text-base">${product.name}</p>
+                        <p class="text-xs text-gray-500 hidden lg:block">${product.description || '-'}</p>
                     </div>
                 </div>
             </td>
-            <td class="py-3 px-4 font-medium text-gray-900">Rp ${formatNumber(product.price)}</td>
-            <td class="py-3 px-4 text-gray-700">${product.stock}</td>
-            <td class="py-3 px-4">
+            <td class="py-2 px-2 lg:px-2 font-medium text-gray-900 text-sm lg:text-base">Rp ${formatNumber(product.price)}</td>
+            <td class="py-2 px-2 lg:px-2 text-gray-700 text-sm lg:text-base hidden sm:table-cell">${product.stock}</td>
+            <td class="py-2 px-2 lg:px-2 hidden md:table-cell">
                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${statusColor}-100 text-${statusColor}-800">
                     ${stockStatus}
                 </span>

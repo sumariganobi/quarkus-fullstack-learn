@@ -18,93 +18,162 @@
             }
         }
     </script>
+    <style>
+        .sidebar-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Sidebar -->
-    <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 transition-transform duration-300 z-40">
-        <div class="flex flex-col h-full">
-            <!-- Logo -->
-            <div class="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
-                <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                    <i class="fas fa-rocket text-white"></i>
-                </div>
-                <span class="text-xl font-bold text-gray-900">Quarkus App</span>
-            </div>
-
-            <!-- Navigation -->
-            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-                <a href="/dashboard.html" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                    <i class="fas fa-home w-5"></i>
-                    <span class="font-medium">Dashboard</span>
-                </a>
-                <a href="/products.html" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                    <i class="fas fa-box w-5"></i>
-                    <span class="font-medium">Products</span>
-                </a>
-                <a href="/warehouses.html" class="flex items-center gap-3 px-4 py-3 text-white bg-gradient-to-r from-primary to-secondary rounded-lg">
-                    <i class="fas fa-warehouse w-5"></i>
-                    <span class="font-medium">Warehouses</span>
-                </a>
-                
-                <div class="pt-4 mt-4 border-t border-gray-200">
-                    <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Settings</p>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                        <i class="fas fa-cog w-5"></i>
-                        <span class="font-medium">Settings</span>
-                    </a>
-                    <a href="#" onclick="logout()" class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition">
-                        <i class="fas fa-sign-out-alt w-5"></i>
-                        <span class="font-medium">Logout</span>
-                    </a>
-                </div>
-            </nav>
-
-            <!-- User Profile -->
-            <div class="px-4 py-4 border-t border-gray-200">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-semibold">
-                        <span id="userInitial">U</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate" id="userName">User</p>
-                        <p class="text-xs text-gray-500 truncate" id="userEmail">user@example.com</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </aside>
+    <!-- Sidebar Container -->
+    <div id="sidebarContainer"></div>
 
     <!-- Main Content -->
-    <div class="ml-64">
+    <div id="mainContent" class="lg:ml-64 transition-all duration-300">
         <!-- Top Bar -->
-        <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
-            <div class="flex items-center justify-between px-8 py-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900">Warehouses</h1>
-                    <p class="text-sm text-gray-600">Manage your warehouse locations</p>
-                </div>
+        <header class="bg-white border-b border-gray-200 sticky top-0 z-20">
+            <div class="flex items-center justify-between px-4 lg:px-8 py-4">
                 <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="lg:hidden text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-xl lg:text-2xl font-bold text-gray-900">Warehouses</h1>
+                        <p class="text-sm text-gray-600 hidden sm:block">Manage your warehouse locations</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 lg:gap-4">
                     <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
-                        <i class="fas fa-bell text-xl"></i>
+                        <i class="fas fa-bell text-lg lg:text-xl"></i>
                         <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
-                    <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
-                        <i class="fas fa-search text-xl"></i>
-                    </button>
+                    <!-- <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition hidden sm:block">
+                        <i class="fas fa-search text-lg lg:text-xl"></i>
+                    </button> -->
                 </div>
             </div>
         </header>
 
         <!-- Content -->
-        <main class="p-8">
+        <main class="p-4 lg:p-4">
             <!-- Alert -->
             <div id="alert" class="hidden mb-6"></div>
             
-            <!-- Form Section -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-6">
-                    <span id="formTitle">Add New Warehouse</span>
+            <!-- Action Buttons -->
+            <div class="mb-4 flex justify-between items-center">
+                <button 
+                    onclick="openAddModal()"
+                    class="flex items-center gap-2 bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-white font-medium py-2 px-4 rounded-lg transition shadow-sm"
+                >
+                    <i class="fas fa-plus"></i>
+                    <span>Add Warehouse</span>
+                </button>
+                
+                <button 
+                    onclick="toggleFilterPanel()"
+                    class="flex items-center gap-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded-lg transition shadow-sm"
+                >
+                    <i class="fas fa-filter"></i>
+                    <span>Search & Filter</span>
+                </button>
+            </div>
+            
+            <!-- Warehouses Table Section -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-2 lg:p-2">                
+                <div id="loading" class="text-center py-12">
+                    <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
+                    <p class="mt-4 text-gray-600">Loading warehouses...</p>
+                </div>
+                
+                <div id="warehousesTable" class="hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="px-2 lg:px-4 py-3 text-left text-xs lg:text-sm font-medium text-gray-600">ID</th>
+                                    <th class="px-2 lg:px-4 py-3 text-left text-xs lg:text-sm font-medium text-gray-600">Name</th>
+                                    <th class="px-2 lg:px-4 py-3 text-left text-xs lg:text-sm font-medium text-gray-600 hidden md:table-cell">Location</th>
+                                    <th class="px-2 lg:px-4 py-3 text-left text-xs lg:text-sm font-medium text-gray-600 hidden lg:table-cell">Capacity</th>
+                                    <th class="px-2 lg:px-4 py-3 text-left text-xs lg:text-sm font-medium text-gray-600 hidden lg:table-cell">Stock</th>
+                                    <th class="px-2 lg:px-4 py-3 text-left text-xs lg:text-sm font-medium text-gray-600 hidden sm:table-cell">Utilization</th>
+                                    <th class="px-2 lg:px-4 py-3 text-center text-xs lg:text-sm font-medium text-gray-600">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="warehousesBody" class="divide-y divide-gray-100">
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <!-- Pagination Controls -->
+                        <div class="flex items-center gap-2">
+                            <button 
+                                id="prevBtn" 
+                                onclick="changePage('prev')"
+                                class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                            >
+                                Previous
+                            </button>
+                            
+                            <div id="pageNumbers" class="flex items-center gap-2">
+                                <!-- Page numbers will be inserted here -->
+                            </div>
+                            
+                            <button 
+                                id="nextBtn"
+                                onclick="changePage('next')"
+                                class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                            >
+                                Next
+                            </button>
+                        </div>
+                        
+                        <!-- Results Per Page & Info -->
+                        <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-2">
+                                <label class="text-sm text-gray-600">Result Per Page</label>
+                                <select 
+                                    id="perPageSelect"
+                                    onchange="changePerPage()"
+                                    class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
+                                >
+                                    <option value="5">5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            
+                            <div class="text-sm text-gray-600">
+                                <span id="paginationInfo">Showing 1 - 10 of 0 items</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Warehouse Modal -->
+    <div id="warehouseModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-900">
+                    <i class="fas fa-warehouse mr-2 text-primary"></i>
+                    <span id="modalTitle">Add New Warehouse</span>
                 </h2>
+                <button onclick="closeWarehouseModal()" class="text-gray-500 hover:text-gray-700 transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="px-6 py-4 overflow-y-auto max-h-[calc(90vh-140px)]">
                 <form id="warehouseForm" class="space-y-4">
                     <input type="hidden" id="warehouseId">
                     
@@ -174,56 +243,188 @@
                             >
                         </div>
                     </div>
-                    
-                    <div class="flex gap-3 pt-4">
-                        <button 
-                            type="submit" 
-                            id="submitBtn"
-                            class="bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
-                        >
-                            <i class="fas fa-plus mr-2"></i>Add Warehouse
-                        </button>
-                        <button 
-                            type="button" 
-                            id="cancelBtn"
-                            class="hidden bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
-                        >
-                            <i class="fas fa-times mr-2"></i>Cancel
-                        </button>
-                    </div>
                 </form>
             </div>
-            
-            <!-- Warehouses Table Section -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h2 class="text-lg font-semibold text-gray-900 mb-6">Warehouses List</h2>
-                
-                <div id="loading" class="text-center py-12">
-                    <i class="fas fa-spinner fa-spin text-4xl text-primary"></i>
-                    <p class="mt-4 text-gray-600">Loading warehouses...</p>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-gray-200 flex flex-col sm:flex-row gap-3">
+                <button 
+                    type="submit" 
+                    form="warehouseForm"
+                    id="submitBtn"
+                    class="flex-1 bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-white font-medium py-2 px-6 rounded-lg transition duration-200"
+                >
+                    <i class="fas fa-save mr-2"></i><span id="submitBtnText">Save Warehouse</span>
+                </button>
+                <button 
+                    type="button" 
+                    onclick="closeWarehouseModal()"
+                    class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-6 rounded-lg transition duration-200"
+                >
+                    <i class="fas fa-times mr-2"></i>Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Panel Overlay -->
+    <div id="filterOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden transition-opacity duration-300" onclick="toggleFilterPanel()"></div>
+
+    <!-- Filter Panel (Slide from right) -->
+    <div id="filterPanel" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300">
+        <div class="flex flex-col h-full">
+            <!-- Panel Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    <i class="fas fa-filter mr-2 text-primary"></i>Search & Filter
+                </h3>
+                <button onclick="toggleFilterPanel()" class="text-gray-500 hover:text-gray-700 transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Panel Content -->
+            <div class="flex-1 overflow-y-auto px-6 py-4 space-y-6">
+                <!-- Search -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-search mr-1"></i>Search Warehouse
+                    </label>
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        placeholder="Search by name or location..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    >
                 </div>
-                
-                <div id="warehousesTable" class="hidden overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">ID</th>
-                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Name</th>
-                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Location</th>
-                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Capacity</th>
-                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Current Stock</th>
-                                <th class="px-4 py-3 text-left text-sm font-medium text-gray-600">Utilization</th>
-                                <th class="px-4 py-3 text-center text-sm font-medium text-gray-600">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="warehousesBody" class="divide-y divide-gray-100">
-                        </tbody>
-                    </table>
+
+                <!-- Location Filter -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-map-marker-alt mr-1"></i>Location
+                    </label>
+                    <input 
+                        type="text" 
+                        id="locationFilter"
+                        placeholder="Filter by location..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    >
+                </div>
+
+                <!-- Capacity Range -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-warehouse mr-1"></i>Capacity Range
+                    </label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <input 
+                                type="number" 
+                                id="minCapacity"
+                                placeholder="Min"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                            >
+                        </div>
+                        <div>
+                            <input 
+                                type="number" 
+                                id="maxCapacity"
+                                placeholder="Max"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Utilization Range -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-chart-pie mr-1"></i>Utilization (%)
+                    </label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <input 
+                                type="number" 
+                                id="minUtilization"
+                                placeholder="Min %"
+                                min="0"
+                                max="100"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                            >
+                        </div>
+                        <div>
+                            <input 
+                                type="number" 
+                                id="maxUtilization"
+                                placeholder="Max %"
+                                min="0"
+                                max="100"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                            >
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Availability Status -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-check-circle mr-1"></i>Availability
+                    </label>
+                    <div class="space-y-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="filterAvailable" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-700">Available (< 80%)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="filterNearFull" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-700">Near Full (80-100%)</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" id="filterFull" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                            <span class="ml-2 text-sm text-gray-700">Full (100%)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Sort By -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-sort mr-1"></i>Sort By
+                    </label>
+                    <select 
+                        id="sortBy"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    >
+                        <option value="">Default</option>
+                        <option value="name-asc">Name (A-Z)</option>
+                        <option value="name-desc">Name (Z-A)</option>
+                        <option value="capacity-asc">Capacity (Low to High)</option>
+                        <option value="capacity-desc">Capacity (High to Low)</option>
+                        <option value="utilization-asc">Utilization (Low to High)</option>
+                        <option value="utilization-desc">Utilization (High to Low)</option>
+                    </select>
                 </div>
             </div>
-        </main>
+
+            <!-- Panel Footer -->
+            <div class="px-6 py-4 border-t border-gray-200 space-y-3">
+                <button 
+                    onclick="applyFilters()"
+                    class="w-full bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-white font-medium py-2 px-4 rounded-lg transition"
+                >
+                    <i class="fas fa-check mr-2"></i>Apply Filters
+                </button>
+                <button 
+                    onclick="clearFilters()"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition"
+                >
+                    <i class="fas fa-undo mr-2"></i>Clear All
+                </button>
+            </div>
+        </div>
     </div>
     
+    <script src="sidebar.js"></script>
     <script src="warehouses.js"></script>
 </body>
 </html>

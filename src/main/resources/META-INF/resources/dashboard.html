@@ -19,151 +19,117 @@
             }
         }
     </script>
+    <style>
+        /* Smooth transitions for sidebar */
+        .sidebar-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        /* Overlay for mobile */
+        .sidebar-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Sidebar -->
-    <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 transition-transform duration-300 z-40">
-        <div class="flex flex-col h-full">
-            <!-- Logo -->
-            <div class="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
-                <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                    <i class="fas fa-rocket text-white"></i>
-                </div>
-                <span class="text-xl font-bold text-gray-900">Quarkus App</span>
-            </div>
-
-            <!-- Navigation -->
-            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-                <a href="/dashboard.html" class="flex items-center gap-3 px-4 py-3 text-white bg-gradient-to-r from-primary to-secondary rounded-lg">
-                    <i class="fas fa-home w-5"></i>
-                    <span class="font-medium">Dashboard</span>
-                </a>
-                <a href="/products.html" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                    <i class="fas fa-box w-5"></i>
-                    <span class="font-medium">Products</span>
-                </a>
-                <a href="/warehouses.html" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                    <i class="fas fa-warehouse w-5"></i>
-                    <span class="font-medium">Warehouses</span>
-                </a>
-                
-                <div class="pt-4 mt-4 border-t border-gray-200">
-                    <p class="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Settings</p>
-                    <a href="#" class="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition">
-                        <i class="fas fa-cog w-5"></i>
-                        <span class="font-medium">Settings</span>
-                    </a>
-                    <a href="#" onclick="logout()" class="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition">
-                        <i class="fas fa-sign-out-alt w-5"></i>
-                        <span class="font-medium">Logout</span>
-                    </a>
-                </div>
-            </nav>
-
-            <!-- User Profile -->
-            <div class="px-4 py-4 border-t border-gray-200">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white font-semibold">
-                        <span id="userInitial">U</span>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate" id="userName">User</p>
-                        <p class="text-xs text-gray-500 truncate" id="userEmail">user@example.com</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </aside>
+    <!-- Sidebar Container -->
+    <div id="sidebarContainer"></div>
 
     <!-- Main Content -->
-    <div class="ml-64">
+    <div id="mainContent" class="lg:ml-64 transition-all duration-300">
         <!-- Top Bar -->
-        <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
-            <div class="flex items-center justify-between px-8 py-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
-                    <p class="text-sm text-gray-600">Welcome back, <span id="welcomeName">User</span>!</p>
-                </div>
+        <header class="bg-white border-b border-gray-200 sticky top-0 z-20">
+            <div class="flex items-center justify-between px-4 lg:px-8 py-4">
                 <div class="flex items-center gap-4">
+                    <!-- Hamburger Menu -->
+                    <button onclick="toggleSidebar()" class="lg:hidden text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-xl lg:text-2xl font-bold text-gray-900">Dashboard</h1>
+                        <p class="text-sm text-gray-600 hidden sm:block">Welcome back, <span id="welcomeName">User</span>!</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 lg:gap-4">
                     <button class="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
-                        <i class="fas fa-bell text-xl"></i>
+                        <i class="fas fa-bell text-lg lg:text-xl"></i>
                         <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
-                    <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
-                        <i class="fas fa-search text-xl"></i>
-                    </button>
+                    <!-- <button class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition hidden sm:block">
+                        <i class="fas fa-search text-lg lg:text-xl"></i>
+                    </button> -->
                 </div>
             </div>
         </header>
 
         <!-- Dashboard Content -->
-        <main class="p-8">
+        <main class="p-4 lg:p-4">
             <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-4 lg:mb-4">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-box text-blue-600 text-xl"></i>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-box text-blue-600 text-lg lg:text-xl"></i>
                         </div>
                         <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
                             +12%
                         </span>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900" id="totalProducts">0</h3>
+                    <h3 class="text-xl lg:text-2xl font-bold text-gray-900" id="totalProducts">0</h3>
                     <p class="text-sm text-gray-600">Total Products</p>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-warehouse text-green-600 text-xl"></i>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-warehouse text-green-600 text-lg lg:text-xl"></i>
                         </div>
                         <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
                             +8%
                         </span>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900" id="totalWarehouses">0</h3>
+                    <h3 class="text-xl lg:text-2xl font-bold text-gray-900" id="totalWarehouses">0</h3>
                     <p class="text-sm text-gray-600">Total Warehouses</p>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-cubes text-purple-600 text-xl"></i>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-cubes text-purple-600 text-lg lg:text-xl"></i>
                         </div>
                         <span class="text-xs font-medium text-red-600 bg-red-100 px-2 py-1 rounded-full">
                             -3%
                         </span>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900" id="totalStock">0</h3>
+                    <h3 class="text-xl lg:text-2xl font-bold text-gray-900" id="totalStock">0</h3>
                     <p class="text-sm text-gray-600">Total Stock</p>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 lg:p-6">
                     <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-chart-line text-orange-600 text-xl"></i>
+                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-orange-600 text-lg lg:text-xl"></i>
                         </div>
                         <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">
                             +15%
                         </span>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900" id="totalCapacity">0</h3>
+                    <h3 class="text-xl lg:text-2xl font-bold text-gray-900" id="totalCapacity">0</h3>
                     <p class="text-sm text-gray-600">Total Capacity</p>
                 </div>
             </div>
 
             <!-- Recent Activity -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Products</h3>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-3 lg:p-4">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">Recent Products</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
                             <tr class="border-b border-gray-200">
-                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">Product</th>
-                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">Price</th>
-                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">Stock</th>
-                                <th class="text-left py-3 px-4 text-sm font-medium text-gray-600">Status</th>
+                                <th class="text-left py-3 px-2 lg:px-4 text-xs lg:text-sm font-medium text-gray-600">Product</th>
+                                <th class="text-left py-3 px-2 lg:px-4 text-xs lg:text-sm font-medium text-gray-600">Price</th>
+                                <th class="text-left py-3 px-2 lg:px-4 text-xs lg:text-sm font-medium text-gray-600 hidden sm:table-cell">Stock</th>
+                                <th class="text-left py-3 px-2 lg:px-4 text-xs lg:text-sm font-medium text-gray-600 hidden md:table-cell">Status</th>
                             </tr>
                         </thead>
                         <tbody id="recentProducts">
@@ -180,6 +146,25 @@
         </main>
     </div>
 
+    <script>
+        // Toggle sidebar function
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                document.getElementById('sidebar').classList.remove('-translate-x-full');
+                document.getElementById('sidebarOverlay').classList.add('hidden');
+            }
+        });
+    </script>
+    <script src="sidebar.js"></script>
     <script src="dashboard.js"></script>
 </body>
 </html>
