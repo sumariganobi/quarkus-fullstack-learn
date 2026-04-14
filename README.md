@@ -21,7 +21,7 @@ quarkus-crud-app/
 
 ## Teknologi yang Digunakan
 
-- **Quarkus 3.8.1** - Framework Java
+- **Quarkus 3.34.3** - Framework Java
 - **Hibernate ORM with Panache** - ORM untuk database
 - **MariaDB** - Database
 - **Flyway** - Database migration
@@ -32,7 +32,7 @@ quarkus-crud-app/
 ## Prasyarat
 
 - **Java 21 LTS** ([Download Java 21](https://adoptium.net/temurin/releases/?version=21))
-- Maven 3.8+ (atau gunakan Maven Wrapper yang sudah disediakan)
+- Maven 3.33+ (atau gunakan Maven Wrapper yang sudah disediakan)
 - MySQL 8.0 atau MariaDB 10.x
 
 ## Setup Database

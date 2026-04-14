@@ -2,7 +2,7 @@
 # Copy this file to docker-compose.override.yml
 # DO NOT commit docker-compose.override.yml to git!
 
-version: '3.8'
+version: '3.34.3'
 
 services:
   mariadb:
